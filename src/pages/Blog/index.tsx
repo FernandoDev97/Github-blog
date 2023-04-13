@@ -1,11 +1,10 @@
 import React from 'react'
+import { Profile } from './components/Profile'
 
 export const Blog = () => {
   return (
-    <div>
-        <p>
-            BLog
-        </p>
-    </div>
+    <>
+      <Profile/>
+    </>
   )
 }

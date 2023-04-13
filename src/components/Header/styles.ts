@@ -9,4 +9,8 @@ export const HeaderContainer = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    > img {
+        margin-bottom: 5rem;
+    }
 `;
