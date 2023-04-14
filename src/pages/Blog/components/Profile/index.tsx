@@ -3,36 +3,77 @@ import { ExternalLink } from "../../../../components/ExternalLink";
 import { ProfileContainer, ProfileDetails, ProfilePicture } from "./styles";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { useCallback, useEffect, useState } from "react";
+import { api } from "../../../../lib/axios";
+import { Spinner } from "../../../../components/Spinner";
+
+const username = import.meta.env.VITE_GITHUB_USERNAME;
+interface ProfileData {
+  login: string;
+  bio: string;
+  avatar_url: string;
+  html_url: string;
+  name: string;
+  company?: string;
+  followers: number;
+}
 
 export function Profile() {
+  const [profileData, setProfileData] = useState<ProfileData>(
+    {} as ProfileData
+  );
+  const [loading, setLoading] = useState(true);
+
+  const getProfileData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/users/${username}`);
+      setProfileData(response.data);
+    } finally {
+      setLoading(false);
+    }
+  }, [profileData]);
+
+  useEffect(() => {
+    getProfileData();
+  }, []);
+
   return (
     <ProfileContainer>
-      <ProfilePicture src="http://github.com/FernandoDev97.png" />
-      <ProfileDetails>
-        <header>
-          <h1>Fernando Souza</h1>
-          <ExternalLink text="Github" href="#" />
-        </header>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam.
-        </p>
-        <ul>
-          <li>
-            <FontAwesomeIcon icon={faGithub} /> 
-            FernandoDev97
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faBuilding} /> 
-            The Brooklyn Brothers
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faUserGroup} /> 
-            12 Seguidores
-          </li>
-        </ul>
-      </ProfileDetails>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <ProfilePicture src={profileData.avatar_url} />
+          <ProfileDetails>
+            <header>
+              <h1>{profileData.name}</h1>
+              <ExternalLink
+                text="Github"
+                href={profileData.html_url}
+                target="_blank"
+              />
+            </header>
+            <p>{profileData.bio}</p>
+            <ul>
+              <li>
+                <FontAwesomeIcon icon={faGithub} />
+                {profileData.login}
+              </li>
+              {profileData?.company && (
+                <li>
+                  <FontAwesomeIcon icon={faBuilding} />
+                  {profileData?.company}
+                </li>
+              )}
+              <li>
+                <FontAwesomeIcon icon={faUserGroup} />
+                {profileData.followers}
+              </li>
+            </ul>
+          </ProfileDetails>
+        </>
+      )}
     </ProfileContainer>
   );
 }

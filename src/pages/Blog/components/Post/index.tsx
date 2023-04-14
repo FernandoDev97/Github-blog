@@ -1,20 +1,23 @@
+import { IPost } from "../..";
+import { relativeDateFormatter } from "../../../../utils/formartter";
 import { PostContainer } from "./styles";
 
-export function Post() {
+interface PostProps {
+  post: IPost
+}
+export function Post({ post }: PostProps) {
+  const formattedDate = relativeDateFormatter(post.created_at)
+
   return (
-    <PostContainer to='/post/1'>
+    <PostContainer to={`/post/${post.number}`}>
       <div>
         <strong>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt
+          {post.title}
         </strong>
-        <span>Há 1 dia</span>
+        <span>{formattedDate}</span>
       </div>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat...
+        {post.body}
       </p>
     </PostContainer>
   );
