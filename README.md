@@ -13,7 +13,6 @@ Durante este desafio, desenvolvemos uma aplicação que utiliza a API do GitHub 
 - TypeScript
 - Styled Components
 - React Router Dom
-- React Hook Form
 - Axios
 - API do Github
 
