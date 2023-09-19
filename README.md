@@ -37,5 +37,3 @@ Depois, execute o ambiente de desenvolvimento com:
 npm run dev
 # ou
 yarn dev
-```
-Veja o resultado em [http://localhost:5173/](http://localhost:5173/)
